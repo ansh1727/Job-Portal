@@ -27,14 +27,6 @@ app.set('trust proxy', 1);
 
 const allowedOrigins = [
   process.env.CLIENT_URL,
-  ...(process.env.ALLOWED_ORIGINS?.split(',').map((origin) => origin.trim()) || []),
-  ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:5173'] : []),
-].filter(Boolean);
-
-app.set('trust proxy', 1);
-
-const allowedOrigins = [
-  process.env.CLIENT_URL,
   ...(process.env.ALLOWED_ORIGINS?.split(',').map(origin => origin.trim()) || []),
   ...(process.env.NODE_ENV !== 'production'
     ? ['http://localhost:5173']
