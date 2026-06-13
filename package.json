@@ -1,0 +1,11 @@
+{
+  "name": "job-portal",
+  "version": "1.0.0",
+  "private": true,
+  "author": "ansh1727",
+  "scripts": {
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "seed": "node backend/scripts/seedAdmin.js && node backend/scripts/seedJobs.js"
+  }
+}
