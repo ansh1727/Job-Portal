@@ -31,19 +31,35 @@ const allowedOrigins = [
   ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:5173'] : []),
 ].filter(Boolean);
 
-app.use(helmet());
+app.set('trust proxy', 1);
+
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  ...(process.env.ALLOWED_ORIGINS?.split(',').map(origin => origin.trim()) || []),
+  ...(process.env.NODE_ENV !== 'production'
+    ? ['http://localhost:5173']
+    : []),
+].filter(Boolean);
+
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('CLIENT_URL:', process.env.CLIENT_URL);
+console.log('ALLOWED_ORIGINS:', process.env.ALLOWED_ORIGINS);
+console.log('Allowed Origins:', allowedOrigins);
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-        return;
+      console.log('Request Origin:', origin);
+
+      if (!origin) {
+        return callback(null, true);
       }
-      if (process.env.NODE_ENV !== 'production') {
-        callback(null, true);
-        return;
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
       }
-      callback(new Error(`Origin ${origin} not allowed by CORS`));
+
+      return callback(new Error(`Origin ${origin} not allowed by CORS`));
     },
     credentials: true,
   })
